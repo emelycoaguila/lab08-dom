@@ -33,8 +33,27 @@
 </head>
 <body>
     <h1>Mi lista de tareas</h1>
-    <p>Mis actividades pendientes:</p>
-    <ul id="listaTareas"></ul>
+
+<p>Mis actividades pendientes:</p>
+
+<form id="formTarea">
+    <input
+    type="text"
+    id="nombreTarea"
+    placeholder="Escribe una tarea">
+    <button type="submit">Agregar tarea</button>
+</form>
+
+<input
+type="text"
+id="buscarTarea"
+placeholder="Buscar tarea"
+>
+
+<p id="mensaje"></p>
+
+<ul id="listaTareas"></ul>
+
     <script src="app.js"></script>
 </body>
 </html>

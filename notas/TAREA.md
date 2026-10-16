@@ -36,3 +36,47 @@ Quería aprender a crear elementos HTML desde JavaScript sin escribir cada tarea
 ### Qué cambió en la página
 
 Las tres tareas aparecen automáticamente al abrir la página. Todavía no se pueden agregar, completar ni eliminar mediante botones.
+
+
+## Version 2: con eventos
+
+### Código principal
+
+```js
+formTarea.addEventListener("submit", (evento) => {
+  evento.preventDefault();
+
+  const nombre = nombreTarea.value.trim();
+
+  if (nombre === "") {
+    mensaje.textContent = "Escribe una tarea antes de agregarla.";
+    return;
+  }
+
+  tareasIniciales.push(nombre);
+  mostrarTareas(tareasIniciales);
+  nombreTarea.value = "";
+});
+
+buscarTarea.addEventListener("input", () => {
+  const texto = buscarTarea.value.toLowerCase();
+
+  const filtradas = tareasIniciales.filter((nombre) =>
+    nombre.toLowerCase().includes(texto)
+  );
+
+  mostrarTareas(filtradas);
+});
+```
+
+### Qué agregué
+
+Agregué un formulario, un buscador y botones para eliminar tareas.
+
+### Por qué lo hice
+
+Quería que el usuario pudiera interactuar con la lista y no solamente ver tareas de ejemplo.
+
+### Qué cambió en la página
+
+Ahora puedo agregar tareas, buscarlas y quitarlas de la pantalla. También aparece un mensaje cuando intento agregar una tarea vacía.
