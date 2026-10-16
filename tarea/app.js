@@ -1,5 +1,18 @@
 
- // Version 2: con eventos
+ // Version 3: con clases y objetos
+
+class Tarea {
+    constructor(nombre) {
+    this.nombre = nombre;
+    this.completada = false;
+}
+completar() {
+    this.completada = !this.completada;
+}
+descripcion() {
+    return this.nombre;
+}
+}
 
 const listaTareas = document.querySelector("#listaTareas");
 const formTarea = document.querySelector("#formTarea");
@@ -7,31 +20,51 @@ const nombreTarea = document.querySelector("#nombreTarea");
 const buscarTarea = document.querySelector("#buscarTarea");
 const mensaje = document.querySelector("#mensaje");
 
-const tareasIniciales = [
-    "Estudiar JavaScript",
-    "Completar el laboratorio",
-    "Repasar los apuntes"
+const tareas = [
+    new Tarea("Estudiar JavaScript"),
+    new Tarea("Completar el laboratorio"),
+    new Tarea("Repasar los apuntes")
 ];
 
-function mostrarTareas(tareas) {
+function mostrarTareas() {
     listaTareas.innerHTML = "";
-        tareas.forEach((nombre) => {
+    const texto = buscarTarea.value.toLowerCase();
+    tareas.forEach((tarea, indice) => {
+    if (!tarea.nombre.toLowerCase().includes(texto)) {
+        return;
+    }
+
     const elemento = document.createElement("li");
-    elemento.textContent = nombre + " ";
+    elemento.textContent = tarea.descripcion() + " ";
+
+    if (tarea.completada) {
+        elemento.style.textDecoration = "line-through";
+    }
+
+    const botonCompletar = document.createElement("button");
+    botonCompletar.textContent = tarea.completada
+    ? "Pendiente"
+    : "Completar";
+
+    botonCompletar.addEventListener("click", () => {
+        tarea.completar();
+        mostrarTareas();
+    });
 
     const botonEliminar = document.createElement("button");
     botonEliminar.textContent = "Eliminar";
 
     botonEliminar.addEventListener("click", () => {
-        elemento.remove();
+        tareas.splice(indice, 1);
+        mostrarTareas();
+        mensaje.textContent = "Tarea eliminada.";
     });
 
+    elemento.appendChild(botonCompletar);
     elemento.appendChild(botonEliminar);
     listaTareas.appendChild(elemento);
 });
 }
-
-mostrarTareas(tareasIniciales);
 
 formTarea.addEventListener("submit", (evento) => {
     evento.preventDefault();
@@ -40,16 +73,13 @@ formTarea.addEventListener("submit", (evento) => {
     mensaje.textContent = "Escribe una tarea antes de agregarla.";
     return;
 }
-tareasIniciales.push(nombre);
-mostrarTareas(tareasIniciales);
+tareas.push(new Tarea(nombre));
+mostrarTareas();
 nombreTarea.value = "";
 mensaje.textContent = "Tarea agregada correctamente.";
 });
 
 buscarTarea.addEventListener("input", () => {
-    const texto = buscarTarea.value.toLowerCase();
-    const filtradas = tareasIniciales.filter((nombre) =>
-    nombre.toLowerCase().includes(texto)
-);
-mostrarTareas(filtradas);
+    mostrarTareas();
 });
+mostrarTareas();
